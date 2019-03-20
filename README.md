@@ -15,10 +15,6 @@ uses to do this can be found in `tools/njic/src/nji/templates`. If you want use
 a custom template you can. Check the help for njic for details. Take care to
 implement all the required parts of the template.
 
-#### Examples ####
-
-For a quick example of using libnji have a look at the code in `test/`.
-
 ##### Requirements #####
 
 The following must be installed:
@@ -67,7 +63,7 @@ a standard Java runtime (such as would be found in linux).
 
 #### The Example ####
 
-The code under ```src/``` provides an example of NJI. It uses only classes from
+The code under `test/` provides an example of NJI. It uses only classes from
 the Java standard library and has been tested on Ubuntu 18.04. It simply
 enumerates threads and prints some output about each thread and its ClassLoader
 if is has one.
