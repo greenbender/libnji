@@ -1,0 +1,6 @@
+{
+    "class": "java/lang/Throwable",
+    "methods": [
+        { "name": "toString" }
+    ]
+}

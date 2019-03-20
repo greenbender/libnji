@@ -1,0 +1,68 @@
+#!/usr/bin/python
+
+from jinja2 import Template
+import argparse
+import nji
+import sys
+import os
+
+
+def main(argv):
+    parser = argparse.ArgumentParser(description='Parse NJI files and generate output based on the options given')
+    parser.add_argument('--template-h', '-t', type=argparse.FileType(mode='rb'), default=nji.template_h, help='Jinja2 template for generation of C header file')
+    parser.add_argument('--template-c', '-T', type=argparse.FileType(mode='rb'), default=nji.template_c, help='Jinja2 template for generation of C source file')
+    parser.add_argument('--classpath', '-p', action='append', help='Specify where to find JAVA user class files that will be used by javap')
+    parser.add_argument('--output-h', '-o', help='Filename for output C header file')
+    parser.add_argument('--output-c', '-O', help='Filename for output C source file')
+    parser.add_argument('--include-prefix', '-i', help='Path prefix for the header #include in the output C source file')
+    parser.add_argument('source', type=argparse.FileType(mode='rb'), help='NJI source file')
+
+    args = parser.parse_args(argv[1:])
+
+    # default output source
+    if not args.output_c:
+        args.output_c = os.path.splitext(args.source.name)[0] + '.c'
+
+    # default output header
+    if not args.output_h:
+        args.output_h = os.path.splitext(args.output_c)[0] + '.h'
+
+    # determine include path
+    if args.include_prefix is None:
+        include = os.path.relpath(
+            os.path.abspath(args.output_h),
+            os.path.dirname(os.path.abspath(args.output_c))
+        )
+    elif args.include_prefix:
+        include = os.path.join(
+            args.include_prefix,
+            os.path.basename(args.output_h)
+        )
+    else:
+        include = os.path.basename(args.output_h)
+
+    # parse
+    try:
+        clazz = nji.parse(args.source, classpath=args.classpath)
+    except Exception as e:
+        sys.stderr.write('%s\n' % e)
+        return -2
+
+    # output header
+    template_h = Template(args.template_h.read())
+    with open(args.output_h, 'wb') as output_h:
+        output_h.write(template_h.render(cls=clazz))
+
+    # output source
+    template_c = Template(args.template_c.read())
+    with open(args.output_c, 'wb') as output_c:
+        output_c.write(template_c.render(cls=clazz, include=include))
+
+    return 0
+    
+
+if __name__ == '__main__':
+    try:
+        sys.exit(main(sys.argv))
+    except KeyboardInterrupt:
+        sys.exit(-1)

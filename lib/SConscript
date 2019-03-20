@@ -1,0 +1,10 @@
+# vi:syntax=python
+
+Import('env')
+
+
+libnji = env.Library('nji', Glob('*.c') + Glob('*.nji'))
+env.Append(LIBS=[libnji])
+
+
+Return('libnji')

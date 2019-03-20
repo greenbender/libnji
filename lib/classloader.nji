@@ -1,0 +1,9 @@
+{
+    "class": "java/lang/ClassLoader",
+    "methods": [
+        {
+            "name": "findClass",
+            "signature": "(Ljava/lang/String;)Ljava/lang/Class;"
+        }
+    ]
+}

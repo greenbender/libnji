@@ -1,0 +1,12 @@
+# vi:syntax=python
+
+Import('env')
+
+
+test = env.Program('test', [
+    'test.c',
+    Glob('*.nji')
+])
+
+
+Return('test')

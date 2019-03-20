@@ -1,0 +1,8 @@
+{
+    "class": "java/lang/Thread",
+    "methods": [
+        { "name": "activeCount" },
+        { "name": "enumerate" },
+        { "name": "getContextClassLoader" }
+    ]
+}

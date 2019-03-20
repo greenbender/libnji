@@ -1,0 +1,15 @@
+{
+    "class": "java/lang/Thread",
+    "fields": [
+        { "name": "MIN_PRIORITY" },
+        { "name": "NORM_PRIORITY" },
+        { "name": "MAX_PRIORITY" }
+    ],
+    "methods": [
+        { "name": "activeCount" },
+        { "name": "getThreads" },
+        { "name": "getContextClassLoader" },
+        { "name": "getId" },
+        { "name": "getName" }
+    ]
+}
