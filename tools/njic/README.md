@@ -1,7 +1,7 @@
 ### Native Java Interface (code generator) ####
 
-njic is a C source code generator that can be used turn NJI files into C source
-and headers files that can be used with libnji.
+njic is a C source code generator that can be used to turn NJI files into C
+source and headers files that can be used with libnji.
 
 The idea is that all of the boiler-plate code that is typically required when
 using the JNI (Java Native Interface) is taken care of using the code generator
@@ -13,14 +13,15 @@ Java Virtual Machine.
 
 #### njic Command ####
 
-See the usage with ```njic --help```
+See the usage with `njic --help`
 
-The output of njic depends on the template used. By default the a C source and
-header file are generated for each NJI file (which defines a simgle Java
+The output of njic depends on the template used. By default a C source and
+header file are generated for each NJI file (which defines a single Java
 class). The header file gives access to a single extern struct that is the C
-version a Java class provides a means of accessing all of the constructors,
-fields, and methods ot the class the were specified in the NJI file. A means to
-access the jclass, jfieldID's, and jmethodID's is also provided.
+version a Java class, and provides a means of accessing all of the
+constructors, fields, and methods of the class the were specified in the NJI
+file. A means to access the jclass, jfieldID's, and jmethodID's is also
+provided.
 
 
 #### NJI JSON Fields ####
@@ -30,15 +31,15 @@ information only. The actual NJI file is JSON and as such does not support
 comments:
 
     {
-        # The name of the java class. JNI (dot) and Binary (slash) notation
+        # The name of the java class. JNI (slash) and Binary (dot) notation
         # both work but by convention JNI notation is preferred.
         "class": "com/example/Example",
 
         # An optional alternate name for the class in C. Use this field if you
         # have a class name conflict or simply want to use a different name. By
-        # default the name will be the actual class name. In this example it
-        # would be 'Example'. For nested classes any '$' in the Java class name
-        # are replaced with '_'.
+        # default the name will be the actual class name (for nested classes
+        # any '$' in the Java class name are replaced with '_'). In this
+        # example it would have been 'Example' if altname wasn't supplied. 
         "altname": "Eg",
 
         # An optional additional classpath to use to lookup this class for the
