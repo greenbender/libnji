@@ -2,7 +2,8 @@
 #define __NJI_DEBUG_H__
 
 
-#if defined(__DEBUG__) && !defined(DEBUG)
+#ifndef DEBUG
+#ifdef __DEBUG__
 #include <stdio.h>
 #define DEBUG(...)                                      \
     do {                                                \
@@ -11,6 +12,7 @@
     } while (0)
 #else
 #define DEBUG(fmt, ...)
+#endif
 #endif
 
 
