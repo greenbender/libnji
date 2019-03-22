@@ -100,7 +100,7 @@ class JavaP(object):
                     member_cls = JniField
                     name = match.group('name')
                     if 'static' in match.group('modifiers'):
-                        kwargs['flags'] = JniMethod.FLAG_STATIC
+                        kwargs['flags'] = JniField.FLAG_STATIC
 
                 # descriptor
                 line = p.stdout.readline()

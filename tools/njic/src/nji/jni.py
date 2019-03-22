@@ -95,8 +95,8 @@ class JniClass(object):
             field.validate()
         for constructor in self.constructors:
             constructor.validate()
-        for field in self.fields:
-            field.validate()
+        for method in self.methods:
+            method.validate()
 
     def uniqify(self):
         members = self.fields + self.constructors + self.methods
