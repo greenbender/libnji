@@ -59,8 +59,8 @@ def generate(env):
     env['NJICTEMPLATEH'] = None
     env['NJICCLASSPATH'] = []
     env['_njicpathopt'] = pathopt
-    env['_NJICTEMPLATEC'] = '${_njicpathopt("--template-h", "NJICTEMPLATEC")} '
-    env['_NJICTEMAPLTEH'] = '${_njicpathopt("--template-c", "NJICTEMPLATEH")} '
+    env['_NJICTEMPLATEC'] = '${_njicpathopt("--template-c", "NJICTEMPLATEC")} '
+    env['_NJICTEMAPLTEH'] = '${_njicpathopt("--template-h", "NJICTEMPLATEH")} '
     env['_NJICCLASSPATH'] = '${_njicpathopt("--classpath", "NJICCLASSPATH", "JAVACLASSPATH")} '
     env['NJICCOM'] = '$NJIC $NJICFLAGS $_NJICTEMPLATEC $_NJICTEMPLATEH $_NJICCLASSPATH --output-c ${TARGETS[0]} --output-h ${TARGETS[1]} $SOURCE'
 
