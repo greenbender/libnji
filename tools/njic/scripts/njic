@@ -49,14 +49,14 @@ def main(argv):
         return -2
 
     # output header
-    template_h = Template(args.template_h.read())
+    template_h = Template(args.template_h.read().decode('utf-8'))
     with open(args.output_h, 'wb') as output_h:
-        output_h.write(template_h.render(cls=clazz))
+        output_h.write(template_h.render(cls=clazz).encode('utf-8'))
 
     # output source
-    template_c = Template(args.template_c.read())
+    template_c = Template(args.template_c.read().decode('utf-8'))
     with open(args.output_c, 'wb') as output_c:
-        output_c.write(template_c.render(cls=clazz, include=include))
+        output_c.write(template_c.render(cls=clazz, include=include).encode('utf-8'))
 
     return 0
     

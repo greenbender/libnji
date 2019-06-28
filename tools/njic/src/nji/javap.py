@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 
-from jni import *
+from .jni import *
 import subprocess
 import re
 
@@ -41,7 +41,7 @@ class JavaP(object):
         clazz = JniClass(classname)
 
         while True:
-            line = p.stdout.readline()
+            line = p.stdout.readline().decode('utf-8')
             if not line:
                 break
 
@@ -103,7 +103,7 @@ class JavaP(object):
                         kwargs['flags'] = JniField.FLAG_STATIC
 
                 # descriptor
-                line = p.stdout.readline()
+                line = p.stdout.readline().decode('utf-8')
                 if not line:
                     raise IOError('Missing descriptor')
                 line = line.rstrip()
@@ -128,4 +128,4 @@ if __name__ == '__main__':
     import sys
     classpath = sys.argv[1]
     classname = sys.argv[2] if len(sys.argv) > 2 else None
-    print JavaP.parse_class(classname, classpath)
+    print(JavaP.parse_class(classname, classpath))

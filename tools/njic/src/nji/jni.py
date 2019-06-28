@@ -127,7 +127,7 @@ class JniMember(object):
         'S': 'jshort',
         'I': 'jint',
         'J': 'jlong',
-        'F': 'jfloat' ,
+        'F': 'jfloat',
         'D': 'jdouble',
         'L': 'jobject',
         'V': 'void',
@@ -140,7 +140,7 @@ class JniMember(object):
         'jshort': 'Short',
         'jint': 'Int',
         'jlong': 'Long',
-        'jfloat' : 'Float',
+        'jfloat': 'Float',
         'jdouble': 'Double',
         'void': 'Void',
     }

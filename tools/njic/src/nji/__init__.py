@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
-from jni import *
-from javap import *
+from .jni import *
+from .javap import *
 import json
 import os
 
