@@ -13,8 +13,6 @@ void test_lookups(void) {
 void test_fields(void) {
     jint value;
 
-    NJI_ENTER;
-
     if (Thread.MIN_PRIORITY(&value, FIELD_GET) == NJI_OK) {
         printf("Thread.MIN_PRIORITY = %d\n", value);
     }
@@ -34,8 +32,6 @@ void test_fields(void) {
             printf("Thread.NORM_PRIORITY = %d\n", value);
         }
     }
-
-    NJI_LEAVE;
 }
 
 
