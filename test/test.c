@@ -15,16 +15,25 @@ void test_fields(void) {
 
     NJI_ENTER;
 
-    if (Thread.MIN_PRIORITY(&value, FIELD_GET) == NJI_OK)
+    if (Thread.MIN_PRIORITY(&value, FIELD_GET) == NJI_OK) {
         printf("Thread.MIN_PRIORITY = %d\n", value);
-    if (Thread.MAX_PRIORITY(&value, FIELD_GET) == NJI_OK)
+    }
+
+    if (Thread.MAX_PRIORITY(&value, FIELD_GET) == NJI_OK) {
         printf("Thread.MAX_PRIORITY = %d\n", value);
-    if (Thread.NORM_PRIORITY(&value, FIELD_GET) == NJI_OK)
+    }
+
+    if (Thread.NORM_PRIORITY(&value, FIELD_GET) == NJI_OK) {
         printf("Thread.NORM_PRIORITY = %d\n", value);
+    }
+
     value++; 
-    if (Thread.NORM_PRIORITY(&value, FIELD_SET) == NJI_OK)
-        if (Thread.NORM_PRIORITY(&value, FIELD_GET) == NJI_OK)
+
+    if (Thread.NORM_PRIORITY(&value, FIELD_SET) == NJI_OK) {
+        if (Thread.NORM_PRIORITY(&value, FIELD_GET) == NJI_OK) {
             printf("Thread.NORM_PRIORITY = %d\n", value);
+        }
+    }
 
     NJI_LEAVE;
 }
@@ -37,53 +46,56 @@ void test_methods(void) {
 
     NJI_ENTER;
 
-    if (Thread.activeCount(&count) != NJI_OK)
+    if (Thread.activeCount(&count) != NJI_OK) {
+        fprintf(stderr, "Failed to get thread count\n");
         goto cleanup;
+    }
 
-    if (Thread.getThreads(&threads) != NJI_OK)
+    if (Thread.getThreads(&threads) != NJI_OK || !threads) {
+        fprintf(stderr, "Failed to get thread array\n");
         goto cleanup;
+    }
 
-    if (GetArrayLength(&count, threads) != NJI_OK)
+    if (GetArrayLength(&count, threads) != NJI_OK) {
+        fprintf(stderr, "Failed to get length of thread array\n");
         goto cleanup;
+    }
 
     printf("Length = %d\n", count);
 
     for (i = 0; i < count; i++) {
         jobject thread;
-        jobject classloader;
-        jlong id;
-        jstring name;
-        const char *name_;
-        jclass clazz;
 
         NJI_ENTER;
 
-        if (GetObjectArrayElement(&thread, threads, i) != NJI_OK)
-            continue;
+        if (GetObjectArrayElement(&thread, threads, i) == NJI_OK && thread) {
+            jlong id;
+            jstring name;
+            const char *name_;
+            jobject classloader;
     
-        if (Thread.getId(&id, thread) == NJI_OK)
-            printf("Thread ID = %ld\n", id);
-
-        if (Thread.getName(&name, thread) == NJI_OK) {
-            if (GetStringUTFChars(&name_, name, NULL) == NJI_OK) {
-                printf("Thread name = %s\n", name_);
-                ReleaseStringUTFChars(name, name_);
+            if (Thread.getId(&id, thread) == NJI_OK) {
+                printf("Thread ID = %ld\n", id);
             }
-        }
 
-        if (Thread.getContextClassLoader(&classloader, thread) != NJI_OK)
-            continue;
+            if (Thread.getName(&name, thread) == NJI_OK && name) {
+                if (GetStringUTFChars(&name_, name, NULL) == NJI_OK) {
+                    printf("Thread name = %s\n", name_);
+                    ReleaseStringUTFChars(name, name_);
+                }
+            }
 
-        if (!classloader)
-            continue;
+            if (Thread.getContextClassLoader(&classloader, thread) == NJI_OK && classloader) {
+                jclass clazz;
 
-        if (Object.getClass(&clazz, classloader) != NJI_OK)
-            continue;
-
-        if (Class.getName(&name, clazz) == NJI_OK) {
-            if (GetStringUTFChars(&name_, name, NULL) == NJI_OK) {
-                printf("Classloader class = %s\n", name_);
-                ReleaseStringUTFChars(name, name_);
+                if (Object.getClass(&clazz, classloader) == NJI_OK && clazz) {
+                    if (Class.getName(&name, clazz) == NJI_OK && name) {
+                        if (GetStringUTFChars(&name_, name, NULL) == NJI_OK) {
+                            printf("Classloader class = %s\n", name_);
+                            ReleaseStringUTFChars(name, name_);
+                        }
+                    }
+                }
             }
         }
 
