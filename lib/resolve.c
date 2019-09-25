@@ -122,23 +122,16 @@ nji_error resolveClassDef(ClassDef *def, ClassSym *sym) {
         goto err;
     }
 
-    if ((error = NewGlobalRef(&def->Class, class)) != NJI_OK) {
-        DEBUG("Failed to create global reference for class '%s': %d\n", sym->name, error);
-        goto err;
-    } 
-
-    DeleteLocalRef(class);
-
     if (def->Fields) {
         jfieldID *d = def->Fields;
         FieldSym *s = sym->Fields;
         for (; s->signature; d++, s++) {
             error = (s->flags & FLAG_STATIC) ?
-                GetStaticFieldID(d, def->Class, s->name, s->signature):
-                GetFieldID(d, def->Class, s->name, s->signature);
+                GetStaticFieldID(d, class, s->name, s->signature):
+                GetFieldID(d, class, s->name, s->signature);
             if (error != NJI_OK && !(s->flags & FLAG_OPTIONAL)) {
                 DEBUG("Failed to resolve field '%s' '%s' in '%s': %d\n", s->name, s->signature, sym->name, error);
-                goto err;
+                goto cleanup;
             }
         }
     }
@@ -147,10 +140,10 @@ nji_error resolveClassDef(ClassDef *def, ClassSym *sym) {
         jmethodID *d = def->Constructors;
         ConstructorSym *s = sym->Constructors;
         for (; s->signature; d++, s++) {
-            error = GetMethodID(d, def->Class, "<init>", s->signature);
+            error = GetMethodID(d, class, "<init>", s->signature);
             if (error != NJI_OK && !(s->flags & FLAG_OPTIONAL)) {
                 DEBUG("Failed to resolve constructor '%s' in '%s: %d'\n", s->signature, sym->name, error);
-                goto err;
+                goto cleanup;
             }
         }
     }
@@ -160,18 +153,26 @@ nji_error resolveClassDef(ClassDef *def, ClassSym *sym) {
         MethodSym *s = sym->Methods;
         for (; s->signature; d++, s++) {
             error = (s->flags & FLAG_STATIC) ?
-                GetStaticMethodID(d, def->Class, s->name, s->signature):
-                GetMethodID(d, def->Class, s->name, s->signature);
+                GetStaticMethodID(d, class, s->name, s->signature):
+                GetMethodID(d, class, s->name, s->signature);
             if (error != NJI_OK && !(s->flags & FLAG_OPTIONAL)) {
                 DEBUG("Failed to resolve method '%s' '%s' in '%s: %d'\n", s->name, s->signature, sym->name, error);
-                goto err;
+                goto cleanup;
             }
         }
+    }
+
+    if ((error = NewGlobalRef(&def->Class, class)) != NJI_OK) {
+        DEBUG("Failed to create global reference for class '%s': %d\n", sym->name, error);
+        goto cleanup;
     }
 
     DEBUG("Successfully resolved class '%s'\n", sym->name);
 
     error = NJI_OK;
+
+cleanup:
+    DeleteLocalRef(class);
 
 err:
     return error;
